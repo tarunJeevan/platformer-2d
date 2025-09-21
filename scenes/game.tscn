@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://dhv4irho1675"]
+[gd_scene load_steps=13 format=3 uid="uid://dhv4irho1675"]
 
 [ext_resource type="PackedScene" uid="uid://ciqpaiieygykr" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://bu0yxvu3depef" path="res://scripts/player.gd" id="2_yqjtg"]
 [ext_resource type="Texture2D" uid="uid://cngbuanbx1sqt" path="res://assets/sprites/world_tileset.png" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://thsk6gnfmhvm" path="res://scenes/platform.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://cs3h01p8e3j5" path="res://scenes/coin.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://c43hgjou4ihi0" path="res://scenes/killzone.tscn" id="6_p57ef"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbhrr"]
 texture = ExtResource("3_lnu2h")
@@ -170,6 +171,21 @@ texture = ExtResource("3_lnu2h")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_lbhrr")
 
+[sub_resource type="Animation" id="Animation_iywne"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(257, -42)]
+}
+
 [sub_resource type="Animation" id="Animation_lbhrr"]
 resource_name = "move_vertical"
 length = 1.5
@@ -187,26 +203,13 @@ tracks/0/keys = {
 "values": [Vector2(257, -42), Vector2(257, 85)]
 }
 
-[sub_resource type="Animation" id="Animation_iywne"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(257, -42)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p57ef"]
 _data = {
 &"RESET": SubResource("Animation_iywne"),
 &"move_vertical": SubResource("Animation_lbhrr")
 }
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_u5sy4"]
 
 [node name="Game" type="Node2D"]
 position = Vector2(0, -8)
@@ -223,6 +226,8 @@ script = ExtResource("2_yqjtg")
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(0, -7)
 zoom = Vector2(4, 4)
+limit_bottom = 110
+limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="Platform" parent="." instance=ExtResource("4_lbhrr")]
@@ -248,3 +253,9 @@ position = Vector2(395, 74)
 
 [node name="Coin5" parent="." instance=ExtResource("5_iywne")]
 position = Vector2(487, -86)
+
+[node name="Killzone" parent="." instance=ExtResource("6_p57ef")]
+position = Vector2(166, 129)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+shape = SubResource("WorldBoundaryShape2D_u5sy4")
